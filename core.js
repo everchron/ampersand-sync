@@ -24,7 +24,7 @@ module.exports = function (xhr) {
   };
 
   return function (method, model, optionsInput) {
-      //Copy the options object. It's using assign instead of clonedeep as an optimization. 
+      //Copy the options object. It's using assign instead of clonedeep as an optimization.
       //The only object we could expect in options is headers, which is safely transfered below.
       var options = assign({},optionsInput);
       var type = methodMap[method];
@@ -40,8 +40,8 @@ module.exports = function (xhr) {
 
       // Default request options.
       var params = {type: type};
-      
-      
+
+
       var ajaxConfig = (result(model, 'ajaxConfig') || {});
       var key;
       // Combine generated headers with user's headers.
@@ -74,7 +74,7 @@ module.exports = function (xhr) {
       if (options.data && type === 'GET') {
           // make sure we've got a '?'
           options.url += includes(options.url, '?') ? '&' : '?';
-          options.url += qs.stringify(options.data);
+          options.url += qs.stringify(options.data, { arrayFormat: 'brackets' });
           //delete `data` so `xhr` doesn't use it as a body
           delete options.data;
       }
@@ -108,7 +108,7 @@ module.exports = function (xhr) {
               if (beforeSend) return beforeSend.apply(this, arguments);
           };
           params.xhrFields = ajaxConfig.xhrFields;
-      } 
+      }
 
       // Turn a jQuery.ajax formatted request into xhr compatible
       params.method = params.type;
